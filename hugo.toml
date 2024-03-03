@@ -1,0 +1,10 @@
+baseURL = 'https://sarahandkarl.sickendick.com/stories/the-fish-and-the-dog/'
+languageCode = 'en-us'
+title = 'The Fish and The Dog'
+theme = "storybook"
+disableKinds = ["taxonomy", "RSS", "sitemap"]
+
+[params]
+    copyright = "Georgia and Karl Sickendick"
+    [params.author]
+        name = "Georgia and Karl Sickendick"

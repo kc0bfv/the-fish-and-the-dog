@@ -1,0 +1,69 @@
+{{- define "main" }}
+
+{{- $sections := $.Site.GetPage "/sections" }}
+{{- $section_list := (sort ($sections.Resources.ByType "page") ".Params.weight") }}
+
+<nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+ <div class="container">
+  <a class="navbar-brand improve-contrast-box" href="#page-top">{{ $.Params.title }}</a>
+  <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">Menu <i class="icon-menu-01"></i></button>
+  <div class="collapse navbar-collapse" id="navbarResponsive">
+   <ul class="navbar-nav ml-auto">
+
+   {{- range $ind, $elem := $section_list }}
+    <li class="nav-item">
+     <a class="nav-link improve-contrast-box" href="#sec-ind-{{ $ind }}">{{- math.Add 1 $ind -}}</a>
+    </li>
+   {{- end }}
+
+   {{- if isset $.Params "menu" }}
+    {{- range $menuitem := $.Params.menu }}
+    <li class="nav-item">
+     <a class="nav-link improve-contrast-box" href="{{ $menuitem.url | safeHTML }}">{{- default $menuitem.url $menuitem.name | safeHTML -}}</a>
+    </li>
+    {{- end }}
+   {{- end }}
+   </ul>
+  </div>
+ </div>
+</nav>
+
+<header id="sec-header" class="content-section text-center">
+    <div class="container"><div class="row"><div class="col-lg-8 mx-auto">
+        <h1>{{ $.Params.title }}</h1>
+        {{- with .Params.image }}
+          {{- $image := resources.Get . }}
+          {{- with $image }}
+              <div><img src="{{ .RelPermalink }}"></div>
+          {{- end }}
+        {{- end }}
+        <a href="#sec-ind-0" class="btn btn-circle" aria-label="Scroll to Next Section"><i class="icon-chevron-down-double"></i></a>
+    </div></div></div>
+</header>
+
+{{- range $ind, $elem := $section_list }}
+ <section id="sec-ind-{{ $ind }}" class="section-{{ $ind }} content-section text-center">
+ <div class="container"><div class="row"><div class="col-lg-8 mx-auto">
+  {{- if $elem.Params.improvecontrast }}<div class="improve-contrast-box">{{- end }}
+  {{- default "" $elem.Content }}
+  {{- if $elem.Params.improvecontrast }}</div>{{- end }}
+  {{- with $elem.Params.image }}
+      {{- $image := resources.Get . }}
+      {{- with $image }}
+          <div><img src="{{ .RelPermalink }}"></div>
+      {{- end }}
+  {{- end }}
+  <a href="#sec-ind-{{ math.Add $ind 1 }}" class="btn btn-circle" aria-label="Scroll to Next Section"><i class="icon-chevron-down-double"></i></a>
+ </div></div></div>
+ </section>
+{{- end }}
+
+{{- $ind := len $section_list }}
+<section id="sec-ind-{{ $ind }}" class="section-{{ $ind }} content-section text-center">
+    <div class="container"><div class="row"><div class="col-lg-8 mx-auto">
+        <h1>THE END</h1>
+        <a href="#sec-ind-0" class="btn btn-circle" aria-label="Scroll to Top"><i class="icon-chevron-up-double"></i></a>
+    </div></div></div>
+</section>
+
+{{- end }}
